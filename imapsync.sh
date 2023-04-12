@@ -4,4 +4,5 @@ imapsync  \
            --user2 david@because.ventures \
            --password2 ***REMOVED*** \
            --gmail1 --gmail2 \
-           --folder "Because Ventures"   
+           --folder "Because Ventures" \
+           --delete1
