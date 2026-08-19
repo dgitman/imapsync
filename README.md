@@ -35,24 +35,25 @@ Each migration script expects two concealed Environment variables:
 - `IMAPSYNC_PASSWORD1` - source Gmail password or app password
 - `IMAPSYNC_PASSWORD2` - destination Gmail password or app password
 
-Mount the matching 1Password Environment in this repository:
+For normal interactive use, inject the matching 1Password Environment at runtime:
 
-| Script | 1Password Environment | Mounted file |
-| --- | --- | --- |
-| `imapsync-dgitman.sh` | `imapsync-dgitman` | `.env.imapsync` |
-| `imapsync-bklein.sh` | `imapsync-bklein` | `.env.bklein` |
+```bash
+op run --env-file=.env.imapsync -- bash imapsync-dgitman.sh --justlogin --nolog
+```
 
-The mounted files are ignored by Git. Do not replace them with ordinary
-plaintext credential files. A 1Password Environment mount may appear as a
-FIFO; the scripts read that format safely without sourcing arbitrary shell
-content.
+The scripts prefer inherited environment variables, so no mounted file is
+required on additional machines. Existing `.env.imapsync` and `.env.bklein`
+mounts remain supported as fallbacks for unattended or legacy workflows. They
+are ignored by Git; do not replace them with plaintext credential files.
+A 1Password Environment mount may appear as a FIFO, which the scripts read
+safely without sourcing arbitrary shell content.
 
 ## Verify the connections
 
 Test both IMAP logins without transferring messages:
 
 ```bash
-bash imapsync-dgitman.sh --justlogin --nolog
+op run --env-file=.env.imapsync -- bash imapsync-dgitman.sh --justlogin --nolog
 bash imapsync-bklein.sh --justlogin --nolog
 ```
 
